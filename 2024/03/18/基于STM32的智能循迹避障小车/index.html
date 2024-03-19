@@ -398,30 +398,7 @@
         
 
         
-        <!-- 代码块功能依赖 -->
-        <script type="text/javascript" src="/libs/codeBlock/codeBlockFunction.js"></script>
 
-        <!-- 代码语言 -->
-        
-        <script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
-        
-
-        <!-- 代码块复制 -->
-        
-        <script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
-        
-
-       <!-- 代码块收缩 -->
-       
-       <script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
-       
-
-       <!-- 代码块折行 -->
-       
-       <style type="text/css">
-       code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
-       </style>
-       
         <div class="card-content article-card-content">
             <div id="articleContent">
                  <meta name="referrer" content="no-referrer">
@@ -460,7 +437,7 @@
 <p>​     （3）如果 1 ～ 4 像素点颜色阈值相同且颜色阈值为黑色，而 4 ～ 7 像素点颜色阈值相同且颜色阈值为白色，就说明摄像头中间区域的左半边区域识别的为黑线，则可判断遇到了左侧T形路口，设置Flag值为2，并且驱动小车进行左转弯。其示意图如下图所示：</p>
 <p><img src="https://gitee.com/ry2001/img/raw/master/202403191345470.png" alt="img"></p>
 <p>​    （4）如果 1、2、3、5、6、7 像素点颜色阈值相同且为白色，但 4像素点颜色阈值单独为黑色不同，则未遇见路口，设置Flag值为3，驱动小车完成直线循迹。其示意图如下图所示：</p>
-<p><img src="/2024/03/18/%E5%9F%BA%E4%BA%8ESTM32%E7%9A%84%E6%99%BA%E8%83%BD%E5%BE%AA%E8%BF%B9%E9%81%BF%E9%9A%9C%E5%B0%8F%E8%BD%A6/936fc9556c614a068fa642e5e9bb3592.png" alt="img"></p>
+<p><img src="https://gitee.com/ry2001/img/raw/master/202403191940492.png" alt="image-20240319193250745"></p>
 <p>​    以上 4 种情况对应的 Flag 数值分别为 0、1、2、3、4，最后将该数值以及直线偏移量由串口传入小车的 MCU 中进行处理。循迹路口判断流程图如下图所示：</p>
 <p><img src="https://gitee.com/ry2001/img/raw/master/202403191345656.png" alt="img"></p>
 <h2 id="3-3-PID直线循迹设计"><a href="#3-3-PID直线循迹设计" class="headerlink" title="3.3 PID直线循迹设计"></a>3.3 PID直线循迹设计</h2><p>​    PID算法：PID 实指“比例 proportional”、“积分 integral”、“微分 derivative”，这三项构成PID 基本要素。每一项完成不同任务，对系统功能产生不同的影响。它的结构简单，参数易于调整，是控制系统中经常采用的控制算法。PID算法又分为位置式PID算法和增量式PID算法，我们设计采用位置式PID算法进行控制，位置式PID定义: </p>
