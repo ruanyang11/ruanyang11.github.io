@@ -637,7 +637,7 @@ gcc  [选项]  [文件名字]
 <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">示例代码 赋值符<span class="string">&quot;=&quot;</span>使用</span><br><span class="line">name = zzk</span><br><span class="line">curname = <span class="variable">$(name)</span></span><br><span class="line">name = zuozhongkai</span><br><span class="line">print :</span><br><span class="line">	@echo curname : <span class="variable">$(curname)</span></span><br></pre></td></tr></table></figure>
 
 <p>​		我们来分析一下上述代码，第 1 行定义了一个变量 name，变量值为“zzk”，第 2 行也定义了一个变量curname，curname的变量值引用了变量name，按照我们C写语言的经验此时curname的值就是“zzk”。第 3 行将变量 name 的值改为了“zuozhongkai”，第 5、6 行是输出变量 curname的值。在 Makefile 要输出一串字符的话使用<code>echo</code>，就和 C 语言中的<code>printf</code>一样，第 6 行中的“echo”前面加了个<code>@</code>符号，因为 Make 在执行的过程中会自动输出命令执行过程，在命令前面加上“@”的话就不会输出命令执行过程，大家可以测试一下不加“@命令<code>make print</code>来执行上述代码，如下图所示：</p>
-<p><img src="https://gitee.com/ry2001/img/raw/master/202403201609270.png" alt="img"></p>
+<p><img src="https://gitee.com/ry2001/img/raw/master/202403201609270.png"></p>
 <p>​		在上图中可以看到curname的值不是“zzk”，竟然是“zuozhongkai”，也就是变量“name” 最后一次赋值的结果，这就是赋值符“&#x3D;”的神奇之处！借助另外一个变量，可以将变量的真实 值推到后面去定义。也就是变量的真实值取决于它所引用的变量的最后一次有效值。</p>
 <ol start="2">
 <li><strong>赋值符“:&#x3D;”</strong></li>
@@ -646,7 +646,7 @@ gcc  [选项]  [文件名字]
 <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">示例代码 <span class="string">&quot;:=&quot;</span>的使用</span><br><span class="line">name = zzk</span><br><span class="line">curname := <span class="variable">$(name)</span></span><br><span class="line">name = zuozhongkai</span><br><span class="line">print :</span><br><span class="line">	@echo curname : $ (curname)</span><br></pre></td></tr></table></figure>
 
 <p>​		修改完成以后重新执行一下 Makefile，结果如图  所示： </p>
-<p><img src="https://gitee.com/ry2001/img/raw/master/202403201610973.png" alt="img"></p>
+<p><img src="https://gitee.com/ry2001/img/raw/master/202403201610973.png"></p>
 <p>​		从上图 中可以看到此时的 curname 是 zzk，不是 zuozhongkai 了。这是因为赋值符“:&#x3D;”不会使用后面定义的变量，只能使用前面已经定义好的，这就是“&#x3D;”和“:&#x3D;”两个的区别。</p>
 <p><strong>3</strong>、赋值符“**?&#x3D;**”</p>
 <p>​		 “?&#x3D;”是一个很有用的赋值符，比如下面这行代码： </p>
@@ -685,7 +685,7 @@ gcc  [选项]  [文件名字]
 </tr>
 <tr>
 <td>$&lt;</td>
-<td>依赖文件集合中的第一个文件，如果依赖文件是以模式 ( 即“ % ” ) 定义的，那么“$&lt; ”就是符合模式的一系列的文件集合。</td>
+<td>依赖文件集合中的第一个文件，如果依赖文件是以模式 ( 即“ % ” ) 定义的，那么<code>$&lt;</code>就是符合模式的一系列的文件集合。</td>
 </tr>
 <tr>
 <td>$?</td>
