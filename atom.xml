@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-03-19T11:40:08.716Z</updated>
+  <updated>2024-03-20T08:15:55.222Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>makefile语法解析</title>
+    <link href="http://example.com/2024/03/20/makefile%E8%AF%AD%E6%B3%95%E8%A7%A3%E6%9E%90/"/>
+    <id>http://example.com/2024/03/20/makefile%E8%AF%AD%E6%B3%95%E8%A7%A3%E6%9E%90/</id>
+    <published>2024-03-20T07:26:00.000Z</published>
+    <updated>2024-03-20T08:15:55.222Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html"> &lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://gitee.com/ry2001/img/raw/master/202403201607431.png&quot;</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>基于STM32的智能循迹避障小车</title>
