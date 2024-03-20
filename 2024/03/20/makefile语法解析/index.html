@@ -521,8 +521,7 @@ gcc  [选项]  [文件名字]
 <p>比如下面这条规则</p>
 <figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">main : main.o input.o calcu.o </span><br><span class="line">    gcc -o main main.o input.o calcu.o</span><br></pre></td></tr></table></figure>
 
-<pre><code>     这条规则的目标是 `main，main.o、input.o 和 calcu.o` 是生成 main 的依赖文件，如果要更新目标 main，就必须先更新它的所有依赖文件，如果依赖文件中的任何一个有更新，那么目标也必须更新，“更新”就是执行一遍规则中的命令列表。 
-</code></pre>
+<p>​			这条规则的目标是 <code>main，main.o、input.o 和 calcu.o</code> 是生成 main 的依赖文件，如果要更新目标 main，就必须先更新它的所有依赖文件，如果依赖文件中的任何一个有更新，那么目标也必须更新，“更新”就是执行一遍规则中的命令列表。 </p>
 <p><strong>命令列表中的每条命令必须以 TAB 键开始，不能使用空格！</strong> </p>
 <p>​		make 命令会为 Makefile 中的每个以 TAB 开始的命令创建一个 Shell 进程去执行。</p>
 <p>Makefile代码示例：</p>
