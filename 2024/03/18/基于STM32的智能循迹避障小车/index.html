@@ -1,0 +1,1138 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="基于STM32的智能循迹避障小车, C,Python">
+    <meta name="description" content=" 
+
+一、 智能循迹避障系统概述​    本文所述的基于STM32控制器的智能循迹避障小车主要由车体、电池模块、主控制器、外接电路扩展板、电机驱动模块、电机、红外对管传感器模块、OpenMV摄像头、碰撞传感器、测距传感器、LCD显示屏等组成">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>基于STM32的智能循迹避障小车 | R.R的博客</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+        <link rel="stylesheet" type="text/css" href="/css/reward.css">
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 7.1.1"><link rel="alternate" href="/atom.xml" title="R.R的博客" type="application/atom+xml">
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">R.R的博客</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">R.R的博客</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">基于STM32的智能循迹避障小车</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2024-03-18
+                </div>
+                
+
+                
+
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                 <meta name="referrer" content="no-referrer">
+
+<h1 id="一、-智能循迹避障系统概述"><a href="#一、-智能循迹避障系统概述" class="headerlink" title="一、 智能循迹避障系统概述"></a>一、 智能循迹避障系统概述</h1><p>​    本文所述的基于STM32控制器的智能循迹避障小车主要由车体、电池模块、主控制器、外接电路扩展板、电机驱动模块、电机、红外对管传感器模块、OpenMV摄像头、碰撞传感器、测距传感器、LCD显示屏等组成，具体结构图如下图所示。</p>
+<p><img src="https://gitee.com/ry2001/img/raw/master/202403191348951.png" alt="img"></p>
+<p>​    智能循迹避障小车，具有感知能力和判断逻辑能力，可以智能化地识别轨道信息并做出相应判断。小车循迹功能主要由OpenMV 摄像头模块负责，利用OpenMV进行直线的循迹，并进行转弯和刹车。OpenMV采用线性回归的方式进行巡线，摄像头会将一帧一帧的图像进行处理，得到二值化图像，获取线性回归直线，并得到直线的角度和相对偏移量，此时我们把相对偏移量通过串口发送到STM32进行数据分析，微处理器分析数据后进行脉冲计算，产生PWM波形和占空比信息；智能寻迹小车控制系统常见的控制指标是速度和路径判断的精度，还要考虑突发状况下的应急反应处理能力和避障能力，小车的避障功能用超声波模块HC_SR04和微动开关实现，小车的转速、电量等参数都会通过串口发送至LABVIEW上位机进行显示，并能通过上位机LABVIEW对小车发出指令操作。</p>
+<p>​    小车循迹H型赛道如图2所示，依次到达ABC三点后返回起点。</p>
+<p><img src="https://gitee.com/ry2001/img/raw/master/202403191348966.png" alt="img"></p>
+<p>​    对于ABC三点的循迹，采用分段路径规划的方法完成。路径一：从起点到A点，A点设有障碍物，用于设置到达A点时停止位置；路径二：从A点到B点，在A点到B点过程中，会经过两个路口，小车在两个路口都需要实现转弯操作，因此在OpenMV基础上配一个红外该对管循迹模块，来完成转向操作，路径三：B点到C点，此时执行直线操作；路径四：C点到起点，同样经过两个路口，小车在两个路口都需要实现转弯操作，至此，小车完成整个H形轨迹循迹。</p>
+<h1 id="二-、系统硬件设计与选型"><a href="#二-、系统硬件设计与选型" class="headerlink" title="二.、系统硬件设计与选型"></a>二.、系统硬件设计与选型</h1><h2 id="2-1-微处理器选择"><a href="#2-1-微处理器选择" class="headerlink" title="2.1 微处理器选择"></a>2.1 微处理器选择</h2><p>​    从性能、功耗以及外设资源等方面考虑：STM32F407在168 MHz频率下，从Flash存储器执行时，能够提供210 DMIPS&#x2F;566 CoreMark性能，并且利用意法半导体的ART加速器实现了Flash零等待状态，并且在90 nm工艺和ART加速器加持下，具有动态功耗调整功能，能够在运行模式下和从Flash存储器执行时实现低至238 µA&#x2F;MHz的电流消耗，同时外设资源丰富，满足实验要求，后期可扩展性强，另外DSP指令和浮点单元扩大了产品的应用范围。</p>
+<h2 id="2-2-循迹模块选择"><a href="#2-2-循迹模块选择" class="headerlink" title="2.2 循迹模块选择"></a>2.2 循迹模块选择</h2><p>​    一般简易式循迹小车通过单一传感器来获取寻迹的迹线信息，容易出现小车信息采集不完整，当小车行驶到较为复杂的路况时，例如S型或者T型轨迹时会出现车辆偏离预定轨迹的情况，另外寻迹小车的运行环境太亮或者太暗，会干扰红外传感器接受红外线的灵敏度，而OpenMV摄像头处在自动识别模式下可以避免光线环境的影响，因此本设计选用OpenMV摄像传感器完成循迹功能。</p>
+<img src="https://gitee.com/ry2001/img/raw/master/202403191348468.png" alt="img" style="zoom:50%;">
+
+<p>​    OpenMV摄像头传感器是用Python语言编程的可编程摄像头，在OpenMV的函数库里，拥有大量的内置图像算法函数，只需要理解每个函数的用法以及返回的值，就可以使用该模块。</p>
+<p>​    OpenMV循迹原理：OpenMV与STM32采用串口的方式进行传参。OpenMV采用线性回归的方式进行巡线，将摄像头得到的帧图像进行二值化图像处理，获取线性回归直线，并计算直线的角度和相对偏移量，把相对偏移量通过串口发送到STM32，利用PID算法计算参数，并将参数合理的转换成小车的速度，以达到控制小车循迹的目的。</p>
+<h2 id="2-3-避障模块选择"><a href="#2-3-避障模块选择" class="headerlink" title="2.3 避障模块选择"></a>2.3 避障模块选择</h2><p>​    循迹小车通过带有长柄的微动开关来检测循迹小车是否碰到物体，当微动开关被按下的时候，其中两个引脚会短路，一个引脚会接地，一个引脚会于处理器的IO口连接，其中与处理器IO口相连接的引脚会与一个上拉电阻进行连接，当循迹小车未遇到障碍物时，微动开关未被触发，此时对应IO口检测的会是高电平，当小车碰撞到障碍物时，触发微动开关，此时引脚会读取电平为低电平，小车左右两边都搭载了微动开关，通过判断两个微动开关输出的电平，可判断小车是哪一测遇到了障碍物，并进行调整。同时循迹小车上搭载了一个超声波模块HC_SR04，用于循迹避障，当小车距离障碍物30cm时，小车开始进行避障报警。</p>
+<p><img src="https://gitee.com/ry2001/img/raw/master/202403191349116.png" alt="img"></p>
+<h2 id="2-4电机驱动模块"><a href="#2-4电机驱动模块" class="headerlink" title="2.4电机驱动模块"></a>2.4电机驱动模块</h2><h3 id="2-4-1-电机的选取"><a href="#2-4-1-电机的选取" class="headerlink" title="2.4.1 电机的选取"></a>2.4.1 电机的选取</h3><p>​    小车采用的电机类型是N20直流减速电机，在电机的机尾搭载了一个霍尔编码器，由霍尔马盘和霍尔元件组成。霍尔马盘是在一定直径的圆板上等分的布置有不同的磁极。霍尔马盘与电动机同轴，电动机旋转时，霍尔元件检测输出若干脉冲信号，为判断转向，可计算输出两相方波信号的相位差。霍尔元件及控制电机转速端子由六个端子组成，其中两个端子接电源和地，分别是2、3端子，1、6端子用来控制小车的速度、前进或后退，如果我们想要计算小车单位时间内转的圈数以及是正转状态还是反转状态就要通过A、B相两个输出端子输出的电平来加以判断，A相输出端子和B相输出端子两者每圈输出的电平数量是一样的，唯一不同的是，他们的相位不相同，正是因为相位不同，我们可以检测出当前轮子是正转还是反转，当正转时，A相的相位领先B相相位90°，反转时，A相的相位落后B相相位90°，通过比较AB两相的相位差即可得到当前小车的状态。</p>
+<p><img src="https://gitee.com/ry2001/img/raw/master/202403191349051.png" alt="img"></p>
+<h3 id="2-4-2-电机驱动芯片选择以及驱动原理"><a href="#2-4-2-电机驱动芯片选择以及驱动原理" class="headerlink" title="2.4.2 电机驱动芯片选择以及驱动原理"></a>2.4.2 电机驱动芯片选择以及驱动原理</h3><p>​    在智能循迹小车中，我们采用了L293集成电机驱动芯片，L293 内部使用三极管作为电子开关，集成了三极管驱动，包含了 2 组 H 桥，可以同时控制两个电机的转速和方向，非常适合在智能车模型中使用。通过给电机的两个出入引脚不同的电平，即可驱动小车运动，当两个输入电平压差越大，小车的转速越快，输入电平越小，小车转速越慢，输入电平的压差不一样，小车运动速度也就不一样，如原理图所示。</p>
+<p><img src="https://gitee.com/ry2001/img/raw/master/202403191349945.png" alt="img"></p>
+<p>​    寻迹小车所用电机是直流减速电机，比较好控制，通过给电机的两个出入引脚不同的电平，即可驱动小车运动，当两个输入电平压差越大，小车的转速越快，输入电平越小，小车转速越慢，输入电平的压差不一样，小车运动速度也就不一样，L293-IN2和L293-IN1驱动其中一个电机，一个引脚连接PWM输出端口，另一个连接普通端口，当固定普通端口输出电平为0时，只需要改变输出PWM值，即可改变转速，此时小车正转，当普通端口输出电平为1时，改变PWM输出值，也可以改变转速，此时小车反转，通过改变两引脚的输出值即可控制小车的姿态。</p>
+<h1 id="三、-软件设计"><a href="#三、-软件设计" class="headerlink" title="三、 软件设计"></a>三、 软件设计</h1><h2 id="3-1-循迹模块设计"><a href="#3-1-循迹模块设计" class="headerlink" title="3.1 循迹模块设计"></a>3.1 循迹模块设计</h2><p>在 OpenMV 摄像头使用中，为了使循迹效果更好，采取了以下措施。</p>
+<p>（1）提高识别速率。采用减小图像面积的方法，将摄像头捕获到的每一帧图像设置为 QQVGA 格式。</p>
+<p>（2）滤除不稳定图帧。在摄像头进入工作状态的一段时间内，捕获的图像往往是不稳定的。通过调用内部集成函数skip_frames(n)使得摄像头跳过n帧图像，滤除不稳定的图像。</p>
+<p>（3）颜色阈值相匹配。为了从图像中提取循迹的轨道，通过调用 binary_threshold 函数，将图像中颜色阈值为 threshold 的部分转换成白色，其他颜色阈值转换成黑色，且 threshold 的颜色阈值与本设计循迹轨道的颜色阈值相对应 [3]。</p>
+<p>（4）校正 OpenMV 摄像头位置。使用 get_regression()函数进行线性回归处理，经处理后的图像可返回直线角度和直线偏移量等参数。其中，直线偏移量反映当前摄像头的位置。当该参数等于 0 时，表示摄像头处于中央位置 ；当该参数大于 0 时，摄像头偏向直线右侧；当该参数小于 0 时，摄像头偏向直线左侧，从而校正摄像头位置。</p>
+<h2 id="3-2循迹路口判断设计"><a href="#3-2循迹路口判断设计" class="headerlink" title="3.2循迹路口判断设计"></a>3.2循迹路口判断设计</h2><p>​    本次循迹采用路径规划的方式来完成H型轨道的循迹，在循迹的过程中，小车MCU要完成对路口的判断，比如十字路口，T型路口等，本设计利用OpenMV采用颜色阈值与路口匹配的方式进行循迹。在小车循迹的过程当中，OpenMV会实时的捕获当前摄像头所拍摄的图像信息，并且在图像的中间矩形区域块，从左向右提取七个像素点，其中第四个像素点位于图像的正中央区域。其示意图如图3.1所示：</p>
+<p><img src="https://gitee.com/ry2001/img/raw/master/202403191344501.png" alt="img"></p>
+<p>​    通过提取这七个像素点的颜色阈值，判断小车是否遇见路口以及路口的类型，包含 T十字形路口、左侧 T 形路口、右侧 T 形路口以及未遇见路口四种情况。将这 4种情况通过无符号 char 类型参数 Flag 表示，Flag 的数值范围为 0 ～ 3。</p>
+<p>​    （1）如果1 ～ 7 像素点的颜色阈值相同且颜色阈值均为黑色，就说明摄像头中间区域块识别的全部都为黑线，则可判断小车遇到了十字形路口，设置Flag值为1，并且驱动小车按照规划路径进行循迹。其示意图下图所示：</p>
+<p><img src="https://gitee.com/ry2001/img/raw/master/202403191344220.png" alt="img"></p>
+<p>​    （2）如果4 ～ 7 像素点的颜色阈值相同且颜色阈值均为黑色，而 1 ～ 4 像素点颜色阈值相同且颜色阈值为白色，就说明摄像头中间区域的右半边区域识别的为黑线，则可判断遇到了右侧T 形路口，设置Flag值为1，并且驱动小车进行右转弯。其示意图如下图所示：</p>
+<p><img src="https://gitee.com/ry2001/img/raw/master/202403191344141.png" alt="img"></p>
+<p>​     （3）如果 1 ～ 4 像素点颜色阈值相同且颜色阈值为黑色，而 4 ～ 7 像素点颜色阈值相同且颜色阈值为白色，就说明摄像头中间区域的左半边区域识别的为黑线，则可判断遇到了左侧T形路口，设置Flag值为2，并且驱动小车进行左转弯。其示意图如下图所示：</p>
+<p><img src="https://gitee.com/ry2001/img/raw/master/202403191345470.png" alt="img"></p>
+<p>​    （4）如果 1、2、3、5、6、7 像素点颜色阈值相同且为白色，但 4像素点颜色阈值单独为黑色不同，则未遇见路口，设置Flag值为3，驱动小车完成直线循迹。其示意图如下图所示：</p>
+<p><img src="https://gitee.com/ry2001/img/raw/master/202403191940492.png" alt="image-20240319193250745"></p>
+<p>​    以上 4 种情况对应的 Flag 数值分别为 0、1、2、3、4，最后将该数值以及直线偏移量由串口传入小车的 MCU 中进行处理。循迹路口判断流程图如下图所示：</p>
+<p><img src="https://gitee.com/ry2001/img/raw/master/202403191345656.png" alt="img"></p>
+<h2 id="3-3-PID直线循迹设计"><a href="#3-3-PID直线循迹设计" class="headerlink" title="3.3 PID直线循迹设计"></a>3.3 PID直线循迹设计</h2><p>​    PID算法：PID 实指“比例 proportional”、“积分 integral”、“微分 derivative”，这三项构成PID 基本要素。每一项完成不同任务，对系统功能产生不同的影响。它的结构简单，参数易于调整，是控制系统中经常采用的控制算法。PID算法又分为位置式PID算法和增量式PID算法，我们设计采用位置式PID算法进行控制，位置式PID定义: </p>
+<p><img src="https://gitee.com/ry2001/img/raw/master/202403191415254.png" alt="img"></p>
+<p>​     位置式PID算法是一种非递推式算法，控制量的值与执行机构的位置是一一对应的，所以能够很好的控制小车进行循迹，本设计的控制量为小车输出的PWM，执行机构为小车电机。小车输出的PWM值是由OpenMV传入小车的MCU的参数通过PID计算得到的，这个参数就是循迹轨道的距离偏移量，当小车处于路径中央位置时，偏移量为0，当小车向左偏移时，偏移量小于0且最小不小于90，当小车向右偏移时，偏移量大于0且最大不大于90。</p>
+<p>​    传入小车的PWM参数计算主要由以下三个步骤得来的：</p>
+<p>​    (1)消除OpenMV输出的负值偏移量。将整个偏移量加上200，此时小车在巡线中央位置所对应的偏移量为200，当小车向左偏移时，偏移量则小于200；当小车向右偏移时，偏移量则大于200。</p>
+<p>​    (2)处理OpenMV传入的参数。将偏移量通过串口将数据发送给小车的MCU，在小车的MCU中我们再将传输的偏移量减去200进行数据还原。</p>
+<p>​    (3)PID计算PWM值。在MCU中我们需要记录当前偏移量的值和上一次偏移量的值，以便于计算两次偏移量的偏差，随后计算出积分部分所需的积累偏差以及微分部分所需的差量。 </p>
+<p>​    KP,KI,KD的初始值都为0，三个参数的值是通过不断的调试确定的；首先调节KP的值，不断的累加，使得值能够使得小车处于微震荡的状态；再调节KI的值,确定值的方法与值类似，通过累加，使得小车能够顺利的循迹并不出现抖动，在位置偏差较大时，也能迅速返回稳定的状态；再调节KD的值，使得最后的值能够在给小车一个外力使其偏移原来的轨道的情况下，能够使得小车迅速反馈并返回平稳的状态。最后根据PID的定义求出，将的数值在原有的基础PWM值上进行加减得到两轮的PWM值，在通过控制器分别控制两轮的速度，从而控制小车循迹。</p>
+<h2 id="3-4-循迹方案设计"><a href="#3-4-循迹方案设计" class="headerlink" title="3.4 循迹方案设计"></a>3.4 循迹方案设计</h2><p>小车循迹H型赛道如图所示，依次到达ABC三点后返回起点。</p>
+<p>对于ABC三点的循迹，采用分段路径规划的方法完成，其主要分为四个路径:</p>
+<p>（1）路径一：从起点到A点。再驶向A点的过程中，首先会遇到一个T字型路口，此时我们让小车不做任何的操作继续进行直线循迹直到A点之后进行掉头；</p>
+<p>（2）路径二：从A点到B点。从A点到B点过程中，会经过两个路口，第一个是T型路口，第二个是十字形路口，当小车在第一个T型路口时，让小车进行右转操作完成转向，再遇到十字型路口时，小车进行右转操作，到达B点会识别B点为十字形路口，此时让小车进行掉头；</p>
+<p>（3）路径三：从B点到C点。再驶向C点的过程中，会遇到一个T字型路口，此时我们让小车不做任何的操作继续进行直线循迹直到C点之后进行掉头。</p>
+<p>（4）路径四：从C点到起点。同样也会遇到两个路口，第一个是T型路口，第二个是十字形路口，当小车在第一个T型路口时，让小车进行左转操作完成转向，再遇到十字型路口时，小车同样进行左转操作，到达起点会识别起点为十字型路口，此时让小车停止，至此，小车完成整个H形轨迹循迹。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Pid_start</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	car_data = USART_RX_BUF[<span class="number">0</span>];</span><br><span class="line">	<span class="keyword">if</span>(car_data&gt;<span class="number">100</span>)</span><br><span class="line">	&#123;</span><br><span class="line">	</span><br><span class="line">	     car_pid.error =car_data<span class="number">-100</span>;</span><br><span class="line">         kp_result = (u32)(car_pid.error*car_pid.kp);</span><br><span class="line">	</span><br><span class="line">	     car_pid.error_sum = car_pid.error_sum+car_pid.error;</span><br><span class="line">	     ki_result = (u32)(car_pid.ki*car_pid.error_sum);</span><br><span class="line">	</span><br><span class="line">	     kd_result = (u32)(car_pid.kd*(car_pid.error-car_pid.error_latest));</span><br><span class="line">	     car_pid.error_latest = car_pid.error;</span><br><span class="line">	     out_put = kp_result+ki_result+kd_result;</span><br><span class="line">		 speed_r =<span class="number">600</span> + out_put;</span><br><span class="line">		 speed_l =<span class="number">650</span> - out_put;<span class="comment">//YOU</span></span><br><span class="line">		     <span class="keyword">if</span>(out_put&gt;<span class="number">650</span>)&#123;speed_l = <span class="number">0</span>;&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">  &#123;</span><br><span class="line">	     car_pid.error =car_data;</span><br><span class="line">         kp_result = (u32)(car_pid.error*car_pid.kp);</span><br><span class="line">	 </span><br><span class="line">	     car_pid.error_sum = car_pid.error_sum+car_pid.error;</span><br><span class="line">	     ki_result = (u32)(car_pid.ki*car_pid.error_sum);</span><br><span class="line">	</span><br><span class="line">	     kd_result = (u32)(car_pid.kd*(car_pid.error-car_pid.error_latest));</span><br><span class="line">	     car_pid.error_latest = car_pid.error;</span><br><span class="line">	</span><br><span class="line">	     out_put = kp_result+ki_result+kd_result;</span><br><span class="line">		 speed_r =<span class="number">600</span> - out_put;</span><br><span class="line">		 speed_l =<span class="number">650</span> + out_put;</span><br><span class="line">		    <span class="keyword">if</span>(out_put&gt;<span class="number">600</span>)&#123;speed_r = <span class="number">0</span>;&#125;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="comment">//	u2_printf(&quot;speed_l:%d speed_r:%d\r\n&quot;,speed_l,speed_r);</span></span><br><span class="line">	<span class="built_in">Car_Turn_speed</span>(speed_l,speed_r);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==" alt="点击并拖拽以移动"></p>
+<h2 id="3-5-避障模块设计"><a href="#3-5-避障模块设计" class="headerlink" title="3.5 避障模块设计"></a>3.5 避障模块设计</h2><p>​    我们采用HC-SR04模块实现避障，通过HC-SR04模块来获取小车与障碍物的距离，当两者的距离小于某个值的时候，就可以做出反应进行避障，HC-SR04模块主要有四个引脚，分别为VCC、GND、Trig(控制端)、Echo(接收端)，前两者通过给模块进行供电，后两者就用来计算与障碍物的距离，HC-SR04模块工作时序图：</p>
+<p><img src="https://gitee.com/ry2001/img/raw/master/202403191415708.png" alt="img"></p>
+<p>​    实现方法：再模块通电的前提下首先给模块的Trig引脚拉高至少10us的高电平;模块会自动发送8个40kHz的方波，自动检测是否有信号返回;如果有信号返回，Echo引脚会给小车的MCU输入一个高电平，高电平持续的时间的就是超声波从发射到返回时间。</p>
+<p>​    我们利用定时器的输入捕获功能计算高电平的时间，当引脚检测到上升沿时，进入中断，将计数值清零，同时设置中断触发方式为下降沿触发，当下降沿到来时，再次进入中断，此时定时器对应的计数值就等于高电平的计数值，再通过公式(测试距离&#x3D;((计数值&#x2F;定时器计数频率)*声速(340M&#x2F;S))&#x2F;2)计算距离，同时设置中断触发方式为上升沿触发，重复进行此过程，可以不断的求出小车与障碍物的距离。避障系统工作流程图：</p>
+<p><img src="https://gitee.com/ry2001/img/raw/master/202403191345870.png" alt="img"></p>
+<h1 id="四、-实验测试分析"><a href="#四、-实验测试分析" class="headerlink" title="四、 实验测试分析"></a>四、 实验测试分析</h1><h2 id="4-1循迹测试"><a href="#4-1循迹测试" class="headerlink" title="4.1循迹测试"></a>4.1循迹测试</h2><p>​    首先对小车的循迹模块进行测试。理论上，如果小车的跑道是笔直的，小车可以一直顺着直线向前行驶。因此，我们不再对小车直线跑进行相关的调试，只调试小车的转弯性能。小车的转弯性能受多方面因素的影响，比如弯道的弯曲程度、小车转弯时电机的速度等等。根据实验室中已有小车的跑道，通过程序对小车的速度进行调整，让小车实现循迹功能。经过调试后发现，小车在跑道一中，转弯时的速度能达到6 cm&#x2F;s（全速时为 20 cm&#x2F;s，下同）；在跑道中，转弯的速度为 4 cm&#x2F;s。这是因为当传感器探测到黑线时，虽然电机驱动芯片切断了相对应的电机的电源，但是由于惯性，电机还会继续运转，不会马上刹车停下。因此，小车的转弯性能与其直线运动的速度之间有较大的关系。经过调试后发现，小车的转弯速度至少要比直线速度慢 1 cm&#x2F;s，要不然小车就会冲出跑道，导致循迹失败。</p>
+<h2 id="4-2智能小车避障功能测试"><a href="#4-2智能小车避障功能测试" class="headerlink" title="4.2智能小车避障功能测试"></a>4.2智能小车避障功能测试</h2><p>​    小车的避障距离设置为30 cm，只有障碍物位于避障模块 30 cm 以内的距离时，小车才会对障碍物做出规避响应。我们选取小车对障碍物判断的准确性、对障碍物的响应距离、响应速度来对小车的避障功能进行评估。为测试小车对障碍物判断的准确性，选取4 个不同大小的物体来进行测试，障碍物的尺寸分 别 为 3 cm×5 cm、 6 cm×7 cm、 8 cm×12 cm、12 cm×16 cm。我们将障碍物放至距离小车 30 cm 处，测试小车是否能正确检测到前方障碍物。经过测试，当 3 cm×5 cm 的障碍物和 6 cm×7 cm 的障碍物放置小车前方时，小车无法正常识别，识别准确率仅为 40%；但小车对尺寸为 8 cm×12 cm 和 12 cm×16 cm 的障碍物的识别准确率可达 100%。分析发现，出现这种情况的原因是 HC-SR04 的硬件特性。HC-SR04 的测量角度为 15°， 在 30 cm 处仅可测量高度大于 8 cm 的物体，因此在检测 3 cm×5 cm和 6 cm×7 cm 的障碍物时，可能会出现误检的情况。为测试小车的响应距离和响应速度，将小车对障碍物的感应距离设置为 30 cm，选取尺寸为8 cm×12 cm 和 12 cm×16 cm 的障碍物，分别放置障碍物。再次经过测试，小车对面积比较大的障碍物响应时间更短。针对同一个障碍物，距离越短，小车的响应时间和距离越短。这是由于小车在运行中无障碍物的情况下会有加速过程；在检测到障碍物之后，小车的步进电机会有刹车动作。从检测到障碍物到小车完全静止，小车行进的距离即为响应距离。在面对距离较近的障碍物时，小车速度较低，响应距离相对较短。在面对距离较远的障碍物时，小车的速度较高，对应的刹车距离也变长。</p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">Joe</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://example.com/2024/03/18/%E5%9F%BA%E4%BA%8ESTM32%E7%9A%84%E6%99%BA%E8%83%BD%E5%BE%AA%E8%BF%B9%E9%81%BF%E9%9A%9C%E5%B0%8F%E8%BD%A6/">http://example.com/2024/03/18/%E5%9F%BA%E4%BA%8ESTM32%E7%9A%84%E6%99%BA%E8%83%BD%E5%BE%AA%E8%BF%B9%E9%81%BF%E9%9A%9C%E5%B0%8F%E8%BD%A6/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">Joe</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2024/03/20/makefile%E8%AF%AD%E6%B3%95%E8%A7%A3%E6%9E%90/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="makefile语法解析">
+                        
+                        <span class="card-title">makefile语法解析</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2024-03-20
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Joe
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2024/03/18/FSMC%E7%A7%BB%E4%BD%8D/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="FSMC移位">
+                        
+                        <span class="card-title">FSMC移位</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-03-18
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/STM32/" class="post-category">
+                                    STM32
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="/libs/aplayer/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2024</span>
+            
+            <a href="/about" target="_blank">Joe</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/blinkfox" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:1181062873@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1181062873" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1181062873" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+    
+    
+
+    <!-- 雪花特效 -->
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
